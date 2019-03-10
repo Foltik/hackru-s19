@@ -98,14 +98,14 @@ d3.csv('apps.csv').then(apps => {
 
         dc.scatterPlot('#polscatter')
             .x(d3.scaleLinear().domain([-1, 1]))
-            .xAxisLabel('Review Polarity')
+            .xAxisLabel('Review Polarity vs. Rating')
             .dimension(polDim)
             .group(polDim.group())
             .render();
 
         dc.scatterPlot('#subscatter')
             .x(d3.scaleLinear().domain([0, 1]))
-            .xAxisLabel('Review Subjectivity')
+            .xAxisLabel('Review Subjectivity vs. Rating')
             .dimension(subDim)
             .group(subDim.group())
             .render();
