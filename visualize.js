@@ -45,8 +45,6 @@ d3.csv('apps.csv').then(apps => {
         const subDim = apps.dimension(d => [d.Subjectivity, +d.Rating]);
 
         dc.barChart('#ratingchart')
-            .width(768)
-            .height(480)
             .x(d3.scaleLinear().domain([1, 5.1]))
             .elasticY(true)
             .barPadding(15)
@@ -55,8 +53,8 @@ d3.csv('apps.csv').then(apps => {
             .render();
 
         dc.pieChart('#catchart')
-            .width(700)
-            .height(400)
+            .width(500)
+            .height(300)
             .cap(19)
             .legend(dc.legend())
             .dimension(catDim)
@@ -64,8 +62,6 @@ d3.csv('apps.csv').then(apps => {
             .render();
 
         dc.barChart('#sizechart')
-            .width(800)
-            .height(800)
             .x(d3.scaleLinear().domain([0, 100]))
             .elasticY(true)
             .barPadding(15)
@@ -73,18 +69,13 @@ d3.csv('apps.csv').then(apps => {
             .group(sizeDim.group())
             .render();
 
-
         dc.scatterPlot('#polscatter')
-            .width(768)
-            .height(480)
             .x(d3.scaleLinear().domain([0, 1]))
             .dimension(polDim)
             .group(polDim.group())
             .render();
 
         dc.scatterPlot('#subscatter')
-            .width(768)
-            .height(480)
             .x(d3.scaleLinear().domain([0, 1]))
             .dimension(subDim)
             .group(subDim.group())
