@@ -36,6 +36,16 @@ d3.csv('apps.csv').then(apps => {
             return acc;
         }, []);
 
+        const itonum = i => parseInt(i.replace(/\+/g, "").replace(/,/g, ""));
+
+        apps = apps.map(d => {
+            d.NInstalls = itonum(d.Installs);
+            return d;
+        });
+
+        apps.sort((a, b) => a.NInstalls - b.NInstalls);
+        console.log(apps.map(a => a.NInstalls));
+
         apps = crossfilter(apps);
 
         const ratingDim = apps.dimension(d => +d.Rating);
@@ -43,10 +53,15 @@ d3.csv('apps.csv').then(apps => {
         const sizeDim = apps.dimension(d => +d.Size);
         const polDim = apps.dimension(d => [d.Polarity, +d.Rating]);
         const subDim = apps.dimension(d => [d.Subjectivity, +d.Rating]);
-        const ratDim = apps.dimension(d => d["Content Rating"]);
+        const ratDim = apps.dimension(d => d['Content Rating']);
+        const typeDim = apps.dimension(d => d.Type);
+        const insDim = apps.dimension(d => d.Installs);
+
+        group = insDim.group();
 
         dc.barChart('#ratingchart')
             .x(d3.scaleLinear().domain([1, 5.1]))
+            .xAxisLabel('Star Rating')
             .elasticY(true)
             .barPadding(15)
             .dimension(ratingDim)
@@ -54,9 +69,9 @@ d3.csv('apps.csv').then(apps => {
             .render();
 
         dc.pieChart('#catchart')
-            .width(500)
             .height(300)
             .cap(19)
+            .renderTitle('App Category')
             .innerRadius(50)
             .legend(dc.legend())
             .dimension(catDim)
@@ -64,8 +79,7 @@ d3.csv('apps.csv').then(apps => {
             .render();
 
         dc.pieChart('#ratchart')
-            .width(700)
-            .height(400)
+            .height(300)
             .cap(19)
             .innerRadius(50)
             .legend(dc.legend())
@@ -75,6 +89,7 @@ d3.csv('apps.csv').then(apps => {
 
         dc.barChart('#sizechart')
             .x(d3.scaleLinear().domain([0, 100]))
+            .xAxisLabel('Size in MB')
             .elasticY(true)
             .barPadding(15)
             .dimension(sizeDim)
@@ -82,15 +97,32 @@ d3.csv('apps.csv').then(apps => {
             .render();
 
         dc.scatterPlot('#polscatter')
-            .x(d3.scaleLinear().domain([0, 1]))
+            .x(d3.scaleLinear().domain([-1, 1]))
+            .xAxisLabel('Review Polarity')
             .dimension(polDim)
             .group(polDim.group())
             .render();
 
         dc.scatterPlot('#subscatter')
             .x(d3.scaleLinear().domain([0, 1]))
+            .xAxisLabel('Review Subjectivity')
             .dimension(subDim)
             .group(subDim.group())
+            .render();
+
+        dc.rowChart('#typechart')
+            .x(d3.scaleBand())
+            .gap(50)
+            .elasticX(true)
+            .dimension(typeDim)
+            .group(typeDim.group())
+            .render();
+
+        dc.rowChart('#inschart')
+            .ordering(d => itonum(d.key))
+            .elasticX(true)
+            .dimension(insDim)
+            .group(insDim.group())
             .render();
 
     }).catch(err => console.error(err));
