@@ -43,6 +43,7 @@ d3.csv('apps.csv').then(apps => {
         const sizeDim = apps.dimension(d => +d.Size);
         const polDim = apps.dimension(d => [d.Polarity, +d.Rating]);
         const subDim = apps.dimension(d => [d.Subjectivity, +d.Rating]);
+        const ratDim = apps.dimension(d => d["Content Rating"]);
 
         dc.barChart('#ratingchart')
             .x(d3.scaleLinear().domain([1, 5.1]))
@@ -56,9 +57,20 @@ d3.csv('apps.csv').then(apps => {
             .width(500)
             .height(300)
             .cap(19)
+            .innerRadius(50)
             .legend(dc.legend())
             .dimension(catDim)
             .group(catDim.group())
+            .render();
+
+        dc.pieChart('#ratchart')
+            .width(700)
+            .height(400)
+            .cap(19)
+            .innerRadius(50)
+            .legend(dc.legend())
+            .dimension(ratDim)
+            .group(ratDim.group())
             .render();
 
         dc.barChart('#sizechart')
