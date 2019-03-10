@@ -28,6 +28,7 @@ d3.csv('apps.csv').then(apps => {
         .width(800)
         .height(800)
         .cap(10)
+        .innerRadius(100)
         .dimension(catDim)
         .group(catDim.group())
         .render();
@@ -39,5 +40,8 @@ d3.csv('apps.csv').then(apps => {
         .barPadding(15)
         .dimension(sizeDim)
         .group(sizeDim.group())
-        .render();
+        .render()
+        .label(function(d) {
+            console.log(JSON.stringify(d));
+        })
 });
